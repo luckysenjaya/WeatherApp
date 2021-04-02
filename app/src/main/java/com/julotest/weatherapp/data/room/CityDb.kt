@@ -7,9 +7,11 @@ import androidx.room.RoomDatabase
 import com.lukeone.mydiary.data.local.dao.CityDao
 import com.lukeone.mydiary.data.local.model.City
 
-@Database(entities = [City::class],
-        version = 1,
-        exportSchema = false)
+@Database(
+    entities = [City::class],
+    version = 1,
+    exportSchema = false
+)
 abstract class CityDb : RoomDatabase() {
     abstract fun getCityDao(): CityDao
 
@@ -19,10 +21,12 @@ abstract class CityDb : RoomDatabase() {
         private var INSTANCE: CityDb? = null
 
         fun getInstance(context: Context): CityDb =
-                INSTANCE ?: synchronized(this) {
-                    INSTANCE ?: Room.databaseBuilder(context.applicationContext,
-                            CityDb::class.java,
-                            "City.db").fallbackToDestructiveMigration().build()
-                }
+            INSTANCE ?: synchronized(this) {
+                INSTANCE ?: Room.databaseBuilder(
+                    context.applicationContext,
+                    CityDb::class.java,
+                    "City.db"
+                ).fallbackToDestructiveMigration().build()
+            }
     }
 }

@@ -26,7 +26,7 @@ class DetailActivity : AppCompatActivity() {
     lateinit var viewModel: DetailViewModel
     var isSaved = false
     lateinit var menu: Menu
-    lateinit var city : String
+    lateinit var city: String
     lateinit var country: String
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -37,7 +37,6 @@ class DetailActivity : AppCompatActivity() {
         )
 
 
-
         val data = intent.getParcelableExtra<WeatherResponse>("weatherdata")
         city = intent.getStringExtra("city")!!
         country = intent.getStringExtra("country")!!
@@ -45,10 +44,9 @@ class DetailActivity : AppCompatActivity() {
 
 
 
-        if(data==null){
+        if (data == null) {
             getCurrentWeatherByCityName(city.toString())
-        }
-        else {
+        } else {
             setCurrentData(data)
         }
         getPredictionData(city.toString())
@@ -64,14 +62,18 @@ class DetailActivity : AppCompatActivity() {
 
             val date = Date(data.dt * 1000)
             val sdf = SimpleDateFormat("EEE, dd MMM yyyy HH:mm") // the format of your date
-            sdf.timeZone = TimeZone.getTimeZone("GMT+7")
+            val timezoneValue = data.timezone / 3600
+            var timezone = "GMT"
+            if (timezoneValue > 0) timezone += "+" + timezoneValue
+            else timezone += timezoneValue
+            sdf.timeZone = TimeZone.getTimeZone(timezone)
 
             tvDatetime.text = sdf.format(date)
             tvHumidity.text = "Humidity ${data.main.humidity}"
             tvWindSpeed.text = "Wind Speed ${data.wind.speed}"
 
             val sdfHour = SimpleDateFormat("HH")
-            sdfHour.timeZone = TimeZone.getTimeZone("GMT+7")
+            sdfHour.timeZone = TimeZone.getTimeZone(timezone)
             val hour = sdfHour.format(date).toInt()
             Log.d("hour", hour.toString())
             val isNight = hour < 6 || hour >= 18;
@@ -85,7 +87,7 @@ class DetailActivity : AppCompatActivity() {
         })
     }
 
-    fun getPredictionData(city: String){
+    fun getPredictionData(city: String) {
         viewModel.getWeatherPrediction(city).observe(this, {
             val modifiedList = ArrayList<DataList>()
             var ct = 0
@@ -100,7 +102,7 @@ class DetailActivity : AppCompatActivity() {
         })
     }
 
-    fun setCurrentData(data: WeatherResponse){
+    fun setCurrentData(data: WeatherResponse) {
         tvTemperature.text = data.main.temp.toString() + "°C"
         tvLocation.text = data.name + " " + data.sys.country
         tvWeather.text = data.weather[0].main
@@ -117,12 +119,11 @@ class DetailActivity : AppCompatActivity() {
         sdfHour.timeZone = TimeZone.getTimeZone("GMT+7")
         val hour = sdfHour.format(date).toInt()
         val isNight = hour < 6 || hour >= 18;
-        if(isNight) {
+        if (isNight) {
             cardLayout.background = ContextCompat.getDrawable(this, R.drawable.ic_card_night)
             ivWeather.setImageDrawable(Util.returnImage(isNight, data.weather[0].main, this))
 
-        }
-        else {
+        } else {
             cardLayout.background = ContextCompat.getDrawable(this, R.drawable.ic_card_day)
             ivWeather.setImageDrawable(Util.returnImage(isNight, data.weather[0].main, this))
         }
@@ -133,13 +134,16 @@ class DetailActivity : AppCompatActivity() {
         inflater.inflate(R.menu.menu, menu)
         this.menu = menu
         viewModel.getCity(city, country, this).observe(this, {
-            if(it!=null){
+            if (it != null) {
                 isSaved = true
-                menu.getItem(0).icon = ContextCompat.getDrawable(this@DetailActivity, R.drawable.ic_baseline_star_24)
-            }
-            else{
+                menu.getItem(0).icon =
+                    ContextCompat.getDrawable(this@DetailActivity, R.drawable.ic_baseline_star_24)
+            } else {
                 isSaved = false
-                menu.getItem(0).icon = ContextCompat.getDrawable(this@DetailActivity, R.drawable.ic_outline_star_border_24)
+                menu.getItem(0).icon = ContextCompat.getDrawable(
+                    this@DetailActivity,
+                    R.drawable.ic_outline_star_border_24
+                )
             }
         })
 
@@ -147,16 +151,17 @@ class DetailActivity : AppCompatActivity() {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        if(isSaved){
+        if (isSaved) {
             viewModel.deleteCity(City(0, city, country), this)
             isSaved = false
-            menu.getItem(0).icon = ContextCompat.getDrawable(this@DetailActivity, R.drawable.ic_outline_star_border_24)
+            menu.getItem(0).icon =
+                ContextCompat.getDrawable(this@DetailActivity, R.drawable.ic_outline_star_border_24)
 
-        }
-        else{
+        } else {
             viewModel.insertCity(City(0, city, country), this)
             isSaved = true
-            menu.getItem(0).icon = ContextCompat.getDrawable(this@DetailActivity, R.drawable.ic_baseline_star_24)
+            menu.getItem(0).icon =
+                ContextCompat.getDrawable(this@DetailActivity, R.drawable.ic_baseline_star_24)
 
 
         }

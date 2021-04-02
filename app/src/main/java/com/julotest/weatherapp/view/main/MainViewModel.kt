@@ -12,9 +12,11 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 class MainViewModel : ViewModel() {
-    fun getWeather(city: String) : MutableLiveData<Result> = Repository.getInstance().getWeatherDetail(city)
+    fun getWeather(city: String): MutableLiveData<Result> =
+        Repository.getInstance().getWeatherDetail(city)
 
-    fun getWeatherByCoordinate(lat: Double, lon:Double) : MutableLiveData<Result> = Repository.getInstance().getWeatherDetailByCoordinate(lat, lon)
+    fun getWeatherByCoordinate(lat: Double, lon: Double): MutableLiveData<Result> =
+        Repository.getInstance().getWeatherDetailByCoordinate(lat, lon)
 
     fun getAllCity(context: Context): LiveData<List<City>> {
         return Repository.getInstance().getAllCity(context)

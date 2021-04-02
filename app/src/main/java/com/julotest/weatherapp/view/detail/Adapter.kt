@@ -19,7 +19,8 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 
-class Adapter(var data: List<DataList>, var city: String, val context: Context) : RecyclerView.Adapter<Adapter.ItemVH>() {
+class Adapter(var data: List<DataList>, var city: String, val context: Context) :
+    RecyclerView.Adapter<Adapter.ItemVH>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ItemVH {
         return ItemVH(
@@ -52,6 +53,8 @@ class Adapter(var data: List<DataList>, var city: String, val context: Context) 
             itemView.tvLocation.text = city
             val date = Date(data.dt * 1000)
             val sdf = SimpleDateFormat("EEE, dd MMM yyyy") // the format of your date
+
+
             sdf.timeZone = TimeZone.getTimeZone("GMT+7")
 
             itemView.tvDatetime.text = sdf.format(date)
@@ -61,15 +64,26 @@ class Adapter(var data: List<DataList>, var city: String, val context: Context) 
             val sdfHour = SimpleDateFormat("HH")
             sdfHour.timeZone = TimeZone.getTimeZone("GMT+7")
             val hour = sdfHour.format(date).toInt()
-            Log.d("hour",hour.toString())
+            Log.d("hour", hour.toString())
             val isNight = hour < 6 || hour >= 18;
-            if(isNight) {
+            if (isNight) {
                 itemView.background = ContextCompat.getDrawable(context, R.drawable.ic_card_night)
-                itemView.ivWeather.setImageDrawable(Util.returnImage(isNight, data.weather[0].main, context))
-            }
-            else {
+                itemView.ivWeather.setImageDrawable(
+                    Util.returnImage(
+                        isNight,
+                        data.weather[0].main,
+                        context
+                    )
+                )
+            } else {
                 itemView.background = ContextCompat.getDrawable(context, R.drawable.ic_card_day)
-                itemView.ivWeather.setImageDrawable(Util.returnImage(isNight, data.weather[0].main, context))
+                itemView.ivWeather.setImageDrawable(
+                    Util.returnImage(
+                        isNight,
+                        data.weather[0].main,
+                        context
+                    )
+                )
 
             }
 

@@ -15,9 +15,11 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 class DetailViewModel : ViewModel() {
-    fun getWeather(city: String) : MutableLiveData<Result> = Repository.getInstance().getWeatherDetail(city)
+    fun getWeather(city: String): MutableLiveData<Result> =
+        Repository.getInstance().getWeatherDetail(city)
 
-    fun getWeatherPrediction(city: String) : MutableLiveData<Result> = Repository.getInstance().getWeatherPrediction(city)
+    fun getWeatherPrediction(city: String): MutableLiveData<Result> =
+        Repository.getInstance().getWeatherPrediction(city)
 
     fun insertCity(city: City, context: Context) {
         viewModelScope.launch(Dispatchers.IO) {
@@ -31,7 +33,7 @@ class DetailViewModel : ViewModel() {
         }
     }
 
-    fun getCity(cityName: String, country:String, context: Context): LiveData<City> {
+    fun getCity(cityName: String, country: String, context: Context): LiveData<City> {
         return Repository.getInstance().getCity(cityName, country, context)
     }
 

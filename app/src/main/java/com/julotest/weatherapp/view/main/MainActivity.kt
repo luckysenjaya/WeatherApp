@@ -55,8 +55,8 @@ class MainActivity : AppCompatActivity() {
         mLocationManager = getSystemService(Context.LOCATION_SERVICE) as LocationManager
 
 
-
-        val autocompleteFragment = supportFragmentManager.findFragmentById(R.id.autocomplete_fragment) as AutocompleteSupportFragment
+        val autocompleteFragment =
+            supportFragmentManager.findFragmentById(R.id.autocomplete_fragment) as AutocompleteSupportFragment
         autocompleteFragment.setPlaceFields(
             Arrays.asList(
                 Place.Field.NAME,
@@ -106,12 +106,12 @@ class MainActivity : AppCompatActivity() {
         super.onResume()
     }
 
-    fun getSavedCity(){
+    fun getSavedCity() {
         savedList.clear()
         val adapter = MainAdapter(savedList, this)
-        adapter.setWeatherListener(object: MainAdapter.WeatherListener {
+        adapter.setWeatherListener(object : MainAdapter.WeatherListener {
             override fun onWeatherListener(data: WeatherResponse) {
-                Log.d("testtt", "testtt "+ data.name)
+                Log.d("testtt", "testtt " + data.name)
                 val intent = Intent(this@MainActivity, DetailActivity::class.java)
                 intent.putExtra("city", data.name)
                 intent.putExtra("country", data.sys.country)
@@ -121,8 +121,8 @@ class MainActivity : AppCompatActivity() {
         rvOtherCity.layoutManager = LinearLayoutManager(this)
         rvOtherCity.adapter = adapter
         viewModel.getAllCity(this).observe(this, {
-            for (city in it){
-                viewModel.getWeather(city.cityName.toString()).observe(this,{
+            for (city in it) {
+                viewModel.getWeather(city.cityName.toString()).observe(this, {
                     savedList.add(it.data as WeatherResponse)
 
                     adapter.notifyDataSetChanged()
@@ -135,7 +135,11 @@ class MainActivity : AppCompatActivity() {
         val criteria = Criteria()
         val provider = mLocationManager.getBestProvider(criteria, false)
 
-        if (ActivityCompat.checkSelfPermission(this, ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+        if (ActivityCompat.checkSelfPermission(
+                this,
+                ACCESS_FINE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
             ActivityCompat.requestPermissions(this, arrayOf(ACCESS_FINE_LOCATION), 1)
             return
         }
@@ -148,24 +152,28 @@ class MainActivity : AppCompatActivity() {
             tvLocation.text = data.name + " " + data.sys.country
             tvWeather.text = data.weather[0].main
 
-            val date = Date(data.dt*1000)
-            val sdf = SimpleDateFormat("EEE, dd MMM yyyy HH:mm") // the format of your date
-            sdf.timeZone = TimeZone.getTimeZone("GMT+7")
+            val date = Date(data.dt * 1000)
+            val sdf = SimpleDateFormat("EEE, dd MMM yyyy HH:mm")
+            val timezoneValue = data.timezone / 3600
+            var timezone = "GMT"
+            if (timezoneValue > 0) timezone += "+" + timezoneValue
+            else timezone += timezoneValue
+            Log.d("timezonevalue", timezone)
+            sdf.timeZone = TimeZone.getTimeZone(timezone)
 
             tvDatetime.text = sdf.format(date)
             tvHumidity.text = "Humidity ${data.main.humidity}"
             tvWindSpeed.text = "Wind Speed ${data.wind.speed}"
 
             val sdfHour = SimpleDateFormat("HH")
-            sdfHour.timeZone = TimeZone.getTimeZone("GMT+7")
+            sdfHour.timeZone = TimeZone.getTimeZone(timezone)
             val hour = sdfHour.format(date).toInt()
-            Log.d("hour",hour.toString())
+            Log.d("hour", hour.toString())
             val isNight = hour < 6 || hour >= 18;
-            if(isNight) {
+            if (isNight) {
                 cardLayout.background = ContextCompat.getDrawable(this, R.drawable.ic_card_night)
                 ivWeather.setImageDrawable(Util.returnImage(isNight, data.weather[0].main, this))
-            }
-            else {
+            } else {
                 cardLayout.background = ContextCompat.getDrawable(this, R.drawable.ic_card_day)
                 ivWeather.setImageDrawable(Util.returnImage(isNight, data.weather[0].main, this))
 
@@ -181,8 +189,6 @@ class MainActivity : AppCompatActivity() {
             }
         })
     }
-
-
 
 
 }

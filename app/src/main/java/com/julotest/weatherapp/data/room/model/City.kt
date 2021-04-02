@@ -9,7 +9,7 @@ import kotlinx.android.parcel.Parcelize
 @Entity(
     tableName = "cities"
 )
-data class City (
+data class City(
     @PrimaryKey(autoGenerate = true)
     @NonNull
     @ColumnInfo(name = "cityId")
