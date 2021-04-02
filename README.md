@@ -7,7 +7,7 @@
     - Save a city and Show it on the Main Page
 
 # How to build:
-    - For Simplicity, use Android Studio to build it
+    - For Simplicity, use Android Studio to build it. There is an apk file in release section too.
 
 
 # Architecture:
