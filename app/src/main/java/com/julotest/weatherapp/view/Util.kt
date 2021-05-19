@@ -9,7 +9,6 @@ import com.julotest.weatherapp.R
 class Util {
     companion object{
         fun returnImage(isNight: Boolean, weather:String, context: Context) : Drawable {
-            Log.d("returnImage", weather)
             if(weather.equals("Rain")) return ContextCompat.getDrawable(context, R.drawable.ic_rain)!!
             else{
                 if(isNight) {
