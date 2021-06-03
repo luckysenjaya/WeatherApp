@@ -26,7 +26,6 @@ class NetworkUtil {
             .build()
     }
 
-    fun api(): ApiService {
-        return getNetwork().create(ApiService::class.java)
-    }
+    fun api(): ApiService = getNetwork().create(ApiService::class.java)
+
 }
