@@ -12,6 +12,7 @@ class Util {
             if(weather.equals("Rain")) return ContextCompat.getDrawable(context, R.drawable.ic_rain)!!
             else{
 				Log.d("TES","TES")
+				Log.d("TES2", "TES2")
                 if(isNight) {
                     return ContextCompat.getDrawable(context, R.drawable.ic_night)!!
                 }
