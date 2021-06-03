@@ -13,6 +13,8 @@ class Util {
             else{
 				Log.d("TES","TES")
 				Log.d("TES2", "TES2")
+				
+				val a = 3;
                 if(isNight) {
                     return ContextCompat.getDrawable(context, R.drawable.ic_night)!!
                 }
