@@ -11,6 +11,7 @@ class Util {
         fun returnImage(isNight: Boolean, weather:String, context: Context) : Drawable {
             if(weather.equals("Rain")) return ContextCompat.getDrawable(context, R.drawable.ic_rain)!!
             else{
+				Log.d("TES","TES")
                 if(isNight) {
                     return ContextCompat.getDrawable(context, R.drawable.ic_night)!!
                 }
